@@ -11,51 +11,46 @@ import {
   HttpCode,
 } from '@nestjs/common';
 
+import { ProductsService } from './../service/products.service';
+
 @Controller('products')
 export class ProductsController {
+  constructor(private readonly productService: ProductsService) {}
+
   @Get()
   getProducts(
     @Query('brand') brand: string,
-    @Query('limit') limit = 100,
-    @Query('offset') offset = 50,
+    @Query('limit') limit = 100, // eslint-disable-line @typescript-eslint/no-unused-vars
+    @Query('offset') offset = 50, // eslint-disable-line @typescript-eslint/no-unused-vars
   ) {
-    return {
-      message: `products: limit=> ${limit} offset=>${offset}brand=>${brand}`,
-    };
+    return this.productService.findAll();
   }
 
   @Get('filter')
   getProductFilter() {
     return {
-      message: `yo soy un  `,
+      message: `yo soy un filtro`,
     };
   }
 
   @Get(':productId')
   @HttpCode(HttpStatus.ACCEPTED)
   getOne(@Param('productId') productId: string) {
-    return {
-      message: `product ${productId}`,
-    };
+    return this.productService.findOne(+productId);
   }
 
   @Post()
   create(@Body() payload: any) {
-    return {
-      message: 'acccion de crear',
-      payload,
-    };
+    return this.productService.create(payload);
   }
 
   @Put(':id')
   update(@Param('id') id: number, @Body() payload: any) {
-    return {
-      id,
-      payload,
-    };
+    return this.productService.update(+id, payload);
   }
+
   @Delete(':id')
   delete(@Param('id') id: number) {
-    return id;
+    return this.productService.delete(id);
   }
 }

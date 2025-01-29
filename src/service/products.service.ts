@@ -55,6 +55,7 @@ export class ProductsService {
 
     return updatedProduct;
   }
+
   delete(id: number) {
     const productIndex = this.products.findIndex((item) => item.id === id);
 
